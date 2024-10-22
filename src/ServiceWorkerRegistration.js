@@ -1,91 +1,74 @@
-const isLocalhost = Boolean(
-    window.location.hostname === 'localhost' ||
-      window.location.hostname === '[::1]' ||
-      window.location.hostname.match(
-        /^127(?:\.(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])){3}$/
-      )
-  );
-  
-  export function register(config) {
-    if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
-      const publicUrl = new URL(process.env.PUBLIC_URL, window.location.href);
-      if (publicUrl.origin !== window.location.origin) {
-        return;
-      }
-  
-      window.addEventListener('load', () => {
-        const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
-  
-        if (isLocalhost) {
-          checkValidServiceWorker(swUrl, config);
-          navigator.serviceWorker.ready.then(() => {
-            console.log('Esta aplicación está sirviendo contenido cacheado.');
-          });
-        } else {
-          registerValidSW(swUrl, config);
-        }
-      });
-    }
-  }
-  
-  function registerValidSW(swUrl, config) {
-    navigator.serviceWorker
-      .register(swUrl)
-      .then((registration) => {
-        registration.onupdatefound = () => {
-          const installingWorker = registration.installing;
-          if (installingWorker == null) {
-            return;
-          }
-          installingWorker.onstatechange = () => {
-            if (installingWorker.state === 'installed') {
-              if (navigator.serviceWorker.controller) {
-                console.log('Nuevo contenido disponible.');
-              } else {
-                console.log('Contenido en caché para uso offline.');
-              }
-            }
-          };
-        };
+const CACHE_NAME = 'my-site-cache-v1';
+const urlsToCache = [
+  '/',
+  '/Notas',
+  '/Especialistas',
+  '/Ayuda',
+  '/Contacto',
+  '/static/css/main.ea3524be.css',  // Archivos estáticos que también necesitarás para estas páginas
+  '/static/js/main.ea3524be.js',
+  // Agrega aquí otros archivos que quieras cachear, como imágenes, etc.
+];
+
+// Durante la fase de instalación, se agregan los archivos especificados al caché
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then((cache) => {
+        console.log('Archivos cacheados');
+        return cache.addAll(urlsToCache);
       })
-      .catch((error) => {
-        console.error('Error al registrar el Service Worker:', error);
-      });
-  }
-  
-  function checkValidServiceWorker(swUrl, config) {
-    fetch(swUrl)
+  );
+});
+
+// Activa el nuevo Service Worker y limpia el caché antiguo si es necesario
+self.addEventListener('activate', (event) => {
+  const cacheWhitelist = [CACHE_NAME];
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cacheName) => {
+          if (!cacheWhitelist.includes(cacheName)) {
+            console.log('Cache antiguo eliminado');
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    })
+  );
+});
+
+// Intercepta las solicitudes y las sirve desde el caché si está disponible, o desde la red si no
+self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    caches.match(event.request)
       .then((response) => {
-        const contentType = response.headers.get('content-type');
-        if (
-          response.status === 404 ||
-          (contentType != null && contentType.indexOf('javascript') === -1)
-        ) {
-          navigator.serviceWorker.ready.then((registration) => {
-            registration.unregister().then(() => {
-              window.location.reload();
-            });
-          });
-        } else {
-          registerValidSW(swUrl, config);
+        // Si el recurso está en caché, lo devuelve desde el caché
+        if (response) {
+          return response;
         }
+        // Si no está en caché, lo busca en la red
+        return fetch(event.request).then(
+          (networkResponse) => {
+            // Si la respuesta es válida, la añade al caché para futuras solicitudes
+            if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
+              return networkResponse;
+            }
+
+            const responseToCache = networkResponse.clone();
+
+            caches.open(CACHE_NAME)
+              .then((cache) => {
+                cache.put(event.request, responseToCache);
+              });
+
+            return networkResponse;
+          }
+        );
       })
       .catch(() => {
-        console.log(
-          'Sin conexión a internet. Ejecutando aplicación en modo offline.'
-        );
-      });
-  }
-  
-  export function unregister() {
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.ready
-        .then((registration) => {
-          registration.unregister();
-        })
-        .catch((error) => {
-          console.error(error.message);
-        });
-    }
-  }
-  
+        // Si está offline y no encuentra el recurso, muestra una página de fallback (opcional)
+        return caches.match('/');
+      })
+  );
+});

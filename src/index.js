@@ -16,8 +16,19 @@ ReactDOM.render(
   root
 );
 
-// Aqui se habilita el service worker
-
-serviceWorkerRegistration.register(); 
+// Registro del Service Worker para modo offline
+serviceWorkerRegistration.register({
+  onUpdate: (registration) => {
+    // Lógica para manejar actualizaciones del Service Worker
+    if (window.confirm("Nueva versión disponible. ¿Deseas actualizar?")) {
+      // Recarga la página para que la nueva versión sea visible
+      registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+      window.location.reload();
+    }
+  },
+  onSuccess: (registration) => {
+    console.log("Service Worker registrado exitosamente:", registration);
+  }
+});
 
 reportWebVitals();
