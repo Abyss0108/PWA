@@ -1,70 +1,93 @@
-# Getting Started with Create React App
+# CirupieD - Gestión de Expedientes Clínicos PWA
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Descripción del Proyecto
 
-## Available Scripts
+**CirupieD** es una Aplicación Web Progresiva (PWA) diseñada para la gestión eficiente de expedientes clínicos. Su objetivo es facilitar el acceso y la manipulación de datos clínicos desde cualquier dispositivo, tanto en línea como fuera de línea. La aplicación está desarrollada utilizando **React + Vite** y **Service Workers** para ofrecer una experiencia rápida, accesible y confiable a los profesionales de la salud.
 
-In the project directory, you can run:
+### Objetivos del Proyecto
 
-### `npm start`
+- Mejorar la accesibilidad a los expedientes clínicos.
+- Facilitar la consulta y actualización de datos clínicos en cualquier momento.
+- Garantizar la seguridad de la información y cumplir con las normativas de protección de datos clínicos.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Metodología de Trabajo
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Metodología Utilizada
 
-### `npm test`
+El desarrollo del proyecto sigue la metodología **Kanban**, la cual permite gestionar el flujo continuo de trabajo de manera dinámica. El equipo trabaja en **sprints** de 1 a 2 semanas, entregando funcionalidades clave de manera incremental y realizando revisiones continuas para asegurar el cumplimiento de los objetivos.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Gestión de Tareas e Issues
 
-### `npm run build`
+Las tareas y los **issues** se gestionan utilizando **Trello**. El flujo de trabajo sigue los siguientes pasos:
+1. **Creación de la tarjeta**: Registro de la tarea en la lista de tareas pendientes.
+2. **Asignación**: Se asigna la tarea a un miembro del equipo.
+3. **Progreso**: Se mueve la tarea entre los estados: "No Iniciado", "En Progreso", "Completado" o "Bloqueado".
+4. **Cierre**: Si la revisión es satisfactoria, la tarea se marca como "Completado".
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Las tareas están priorizadas por nivel de importancia:
+- **Alta**: Tareas críticas que requieren atención inmediata.
+- **Media**: Funcionalidades importantes pero no urgentes.
+- **Baja**: Tareas menores o ajustes.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+#### Ejemplo de Issue:
+- Descripción: Crear un archivo manifest.json.
+- Asignado a: Maria Lina Maximo Hernandez
+- Fecha de entrega: 12 de octubre
+- Sprint: 2
+- Prioridad: Media
+- Estado: No Iniciado
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Control de Versiones
 
-### `npm run eject`
+### Herramienta Seleccionada
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+El control de versiones se gestiona con **Git** y el repositorio está alojado en **GitHub**.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Estrategia de Versionamiento
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Utilizamos la estrategia **GitFlow** para organizar el desarrollo de forma estructurada:
+- **main**: Contiene el código en producción.
+- **develop**: Donde se integran nuevas funcionalidades antes de pasar a producción.
+- **feature/**: Ramas específicas para el desarrollo de nuevas funcionalidades.
+- **hotfix/**: Ramas dedicadas a corregir errores críticos en producción.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+#### Jerarquía de Ramas
 
-## Learn More
+1. **main** (producción)
+2. **develop** (integración de nuevas funcionalidades)
+   - **feature/nueva-funcionalidad**
+3. **hotfix/** (correcciones críticas)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Cada miembro del equipo trabaja en su propia rama, creada a partir de `develop`, utilizando el prefijo `feature/`. Las ramas de corrección urgente (`hotfix/`) se crean desde `main`.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Políticas de Merge
 
-### Code Splitting
+Las ramas `feature/` se integran a `develop` mediante **pull requests**, tras pasar por revisiones de código y pruebas. Solo un usuario autorizado puede hacer merges a la rama `main`, asegurando un control de calidad riguroso.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Estrategia de Despliegue
 
-### Analyzing the Bundle Size
+### Estrategia Seleccionada
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Utilizamos un despliegue gradual con la técnica de **Canary Deployment**, que permite introducir nuevas funcionalidades de manera progresiva, minimizando el impacto en caso de fallos.
 
-### Making a Progressive Web App
+### Entornos de Despliegue
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+- **Desarrollo**: Ramas `feature/` en desarrollo.
+- **Staging**: Rama `develop`, para validación y pruebas de integración.
+- **Producción**: Rama `main`, con código estable.
 
-### Advanced Configuration
+### Integración Continua (CI/CD)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Se utiliza **GitHub Actions** para automatizar las pruebas y el despliegue en cada commit, asegurando que el código sea probado antes de integrarse en producción.
 
-### Deployment
+## Instrucciones para Desarrolladores
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+### Clonar el Repositorio
 
-### `npm run build` fails to minify
+```bash
+git clone https://github.com/usuario/cirupied.git
+cd cirupied
+npm install
+npm run start 
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
