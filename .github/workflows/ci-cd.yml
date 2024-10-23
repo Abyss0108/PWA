@@ -1,0 +1,87 @@
+name: PWA CI/CD Workflow  # Nombre del flujo de trabajo
+
+on:
+  push:
+    branches:
+      - main  # Se ejecuta en la rama main
+      - develop  # Se ejecuta en la rama develop
+      - feature/**  # Para cualquier rama de características
+  pull_request:
+    branches:
+      - main  # Validación de cambios antes de la fusión en la rama main
+  workflow_dispatch:  # Activación manual opcional
+
+jobs:
+  # Trabajo de pruebas
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out the code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Run tests
+      run: npm test  # Ejecutar pruebas
+
+  # Trabajo de compilación y despliegue
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out the code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+
+    - name: Cache node modules
+      uses: actions/cache@v2
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build the project
+      run: npm run build
+
+    - name: Upload artifact if build is successful
+      if: success()  # Solo si la compilación fue exitosa
+      uses: actions/upload-artifact@v2
+      with:
+        name: build-artifact
+        path: ./build  # Ruta de los archivos de compilación
+
+  # Despliegue en producción solo desde ramas específicas
+  deploy:
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release/')
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out the code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build the project
+      run: npm run build
+
+    - name: Deploy to production
+      run: |
+        echo "Desplegando a producción..."  # Añade aquí tus pasos específicos de despliegue
