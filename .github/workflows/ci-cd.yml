@@ -1,0 +1,12 @@
+name: PWA CI/CD Workflow  # Nombre del flujo de trabajo
+
+on:
+  push:
+    branches:
+      - main 
+      - develop 
+      - feature/**  
+  pull_request:
+    branches:
+      - main  
+  workflow_dispatch:  
