@@ -1,22 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import AppShell from './App';
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import * as serviceWorkerRegistration from './serviceWorkerRegistration'; // Importa el archivo del service worker
+//import * as serviceWorkerRegistration from './serviceWorkerRegistration'; // Importa el archivo del service worker
 
 const root = document.getElementById('root');
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <AppShell />
   </React.StrictMode>,
   root
 );
 
 // Registrar el service worker
-serviceWorkerRegistration.register(); 
+//serviceWorkerRegistration.register(); 
 
 reportWebVitals();
