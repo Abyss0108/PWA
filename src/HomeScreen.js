@@ -1,5 +1,5 @@
 import React from 'react';
-import Home from '../views/Inicio'; 
+import Home from './views/Inicio'; 
 
 const HomeScreen = () => {
   return (
