@@ -1,0 +1,12 @@
+.splash-screen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-image: url('../img/fondo.png'); /* Ruta a tu imagen */
+  background-size: cover; /* Asegura que la imagen cubra todo el fondo */
+  background-position: center; /* Centra la imagen */
+  text-align: center;
+  color: white; /* Cambia el color del texto si es necesario para que sea legible */
+}

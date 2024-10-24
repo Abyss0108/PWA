@@ -1,26 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import AppShell from './App';
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-<<<<<<< Updated upstream
-//import * as serviceWorkerRegistration from './ServiceWorkerRegistration'; 
-=======
->>>>>>> Stashed changes
+
 
 const root = document.getElementById('root');
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <AppShell />
   </React.StrictMode>,
   root
 );
 
-<<<<<<< Updated upstream
-=======
+
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/service-worker.js')
@@ -33,7 +29,6 @@ if ('serviceWorker' in navigator) {
   });
 }
 
->>>>>>> Stashed changes
 
 
 reportWebVitals();
