@@ -5,7 +5,7 @@ import AppShell from './App';
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-//import * as serviceWorkerRegistration from './serviceWorkerRegistration'; // Importa el archivo del service worker
+
 
 const root = document.getElementById('root');
 
@@ -16,7 +16,19 @@ ReactDOM.render(
   root
 );
 
-// Registrar el service worker
-//serviceWorkerRegistration.register(); 
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then((registration) => {
+        console.log('Service Worker registrado con éxito:', registration.scope);
+      })
+      .catch((error) => {
+        console.log('Error al registrar el Service Worker:', error);
+      });
+  });
+}
+
+
 
 reportWebVitals();
